@@ -24,19 +24,28 @@ module.exports.createCamp = async (req, res) => {
   const camp = new Camp({ ...req.body });
   const { schoolId } = req.params;
   const school = await School.findById(schoolId);
+  console.log(camp);
+  console.log(school);
+  school.camps.push(camp);
+  await school.save();
   await camp.save().then(() => {
     console.log("The camp was created Sucessfully");
   });
-  await school.camps.push(camp);
+  res.status(201).json({ message: "The camp was created successfully" });
 };
 
 module.exports.registerStudent = async (req, res) => {
   const { schoolId, campId } = req.params;
   const school = await School.findById(schoolId);
+  console.log(school);
   const camp = await Camp.findById(campId);
+  console.log(camp);
   const student = new Student({ ...req.body });
+  console.log(student);
+  camp.students.push(student);
+  await camp.save();
   await student.save().then(() => {
     console.log("The student was registered Successfully");
   });
-  camp.students.push(student);
+  res.status(201).json({ message: "The student was registered successfully" });
 };

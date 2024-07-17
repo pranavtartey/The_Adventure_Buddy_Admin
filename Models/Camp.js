@@ -7,7 +7,7 @@ const campSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    required: true,
+    // required: true,
   },
   students: [
     {
@@ -20,4 +20,4 @@ const campSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Admin", campSchema);
+module.exports = mongoose.model("Camp", campSchema);
