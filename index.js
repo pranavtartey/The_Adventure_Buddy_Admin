@@ -7,6 +7,8 @@ const cors = require("cors");
 const adminRoutes = require("./Routes/Admin");
 const schoolRoutes = require("./Routes/School");
 const path = require("path");
+const cron = require("node-cron");
+const { removeStudents } = require("./utils/RemoveStudents");
 
 const PORT = process.env.PORT || 8080;
 
@@ -30,6 +32,9 @@ db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
   console.log("Database Connected Successfully");
 });
+
+removeStudents();
+cron.schedule("0 0 * * 0", removeStudents);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

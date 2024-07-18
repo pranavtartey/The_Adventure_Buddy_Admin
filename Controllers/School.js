@@ -1,6 +1,7 @@
 const School = require("../Models/School");
 const Camp = require("../Models/Camp");
 const Student = require("../Models/Student");
+const cron = require("node-cron");
 
 module.exports.createSchool = async (req, res) => {
   const newSchool = new School({ ...req.body });
@@ -21,7 +22,12 @@ module.exports.getSchool = async (req, res) => {
 };
 
 module.exports.createCamp = async (req, res) => {
-  const camp = new Camp({ ...req.body });
+  const { name, date } = req.body;
+  const campTime = new Date(date).getTime();
+  const camp = new Camp({
+    name,
+    date: campTime,
+  });
   const { schoolId } = req.params;
   const school = await School.findById(schoolId);
   console.log(camp);
@@ -31,6 +37,7 @@ module.exports.createCamp = async (req, res) => {
   await camp.save().then(() => {
     console.log("The camp was created Sucessfully");
   });
+
   res.status(201).json({ message: "The camp was created successfully" });
 };
 
@@ -43,6 +50,7 @@ module.exports.registerStudent = async (req, res) => {
   const student = new Student({ ...req.body });
   console.log(student);
   camp.students.push(student);
+  camp.studentCount += 1;
   await camp.save();
   await student.save().then(() => {
     console.log("The student was registered Successfully");

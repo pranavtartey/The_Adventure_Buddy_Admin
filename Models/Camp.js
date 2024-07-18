@@ -6,8 +6,8 @@ const campSchema = new mongoose.Schema({
     required: true,
   },
   date: {
-    type: Date,
-    // required: true,
+    type: Number, //date should be provided in the format of yy/mm/dd and to convert the date back to human readable form pass this date in miliseconds to the new Date(your milisecond date) and you will get it
+    required: true,
   },
   students: [
     {
@@ -17,6 +17,7 @@ const campSchema = new mongoose.Schema({
   ],
   studentCount: {
     type: Number,
+    default: 0,
   },
 });
 
