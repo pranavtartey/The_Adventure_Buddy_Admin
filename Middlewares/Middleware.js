@@ -1,4 +1,5 @@
 const Camp = require("../Models/Camp");
+const jwt = require("jsonwebtoken");
 
 module.exports.verifyRegister = async (req, res, next) => {
   const { campId } = req.params;
@@ -10,4 +11,18 @@ module.exports.verifyRegister = async (req, res, next) => {
     });
   }
   next();
+};
+
+module.exports.verifyAdmin = async (req, res, next) => {
+  const auth = req.cookies.Authorization;
+  if (!auth) return res.status(401).json({ message: "Invalid Token :(" });
+
+  try {
+    const verify = jwt.verify(auth, process.env.TOKEN_SECRET);
+    console.log(verify);
+    // req.username = verify;
+    next();
+  } catch (error) {
+    res.send(error);
+  }
 };
