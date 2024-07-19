@@ -5,10 +5,11 @@ const mongoose = require("mongoose");
 const removeStudents = async () => {
   try {
     const oneWeekAgo = new Date();
-    // oneWeekAgo.setDate(oneWeekAgo.getDate() - 7 );
-    oneWeekAgo.setDate(oneWeekAgo.getDate());
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7 );
+    // oneWeekAgo.setDate(oneWeekAgo.getDate());
 
     const camps = await Camp.find({ date: { $lte: oneWeekAgo } });
+    console.log(camps);
 
     for (const camp of camps) {
       await Student.deleteMany({ _id: { $in: camp.students } });

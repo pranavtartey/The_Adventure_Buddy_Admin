@@ -57,13 +57,6 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  enrolledAt: {
-    type: Date,
-    default: Date.now,
-    index: {
-      expireAfterSeconds: 120,
-    },
-  },
 });
 
 module.exports = mongoose.model("Student", studentSchema);
