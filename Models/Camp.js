@@ -12,7 +12,7 @@ const campSchema = new mongoose.Schema({
   students: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Sudent",
+      ref: "Student",
     },
   ],
   studentCount: {

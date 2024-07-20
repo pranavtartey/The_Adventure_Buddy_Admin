@@ -61,9 +61,9 @@ db.once("open", () => {
 //Routes Config
 app.use("/the_adventure_buddy/admin", adminRoutes);
 app.use("/the_adventure_buddy/public", schoolRoutes);
-app.use("/", (req, res) => {
-  res.status(201).json({ message: "welcome to The Adventure Buddy" });
-});
+// app.use("/", (req, res) => {
+//   res.status(201).json({ message: "welcome to The Adventure Buddy" });
+// });
 
 removeStudents();
 cron.schedule("0 0 * * 0", removeStudents);

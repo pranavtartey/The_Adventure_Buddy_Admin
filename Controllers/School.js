@@ -48,12 +48,12 @@ module.exports.registerStudent = async (req, res) => {
   const camp = await Camp.findById(campId);
   console.log(camp);
   const student = new Student({ ...req.body });
+  await student.save().then(() => {
+    console.log("The student was registered Successfully");
+  });
   console.log(student);
   camp.students.push(student);
   camp.studentCount += 1;
   await camp.save();
-  await student.save().then(() => {
-    console.log("The student was registered Successfully");
-  });
   res.status(201).json({ message: "The student was registered successfully" });
 };

@@ -6,9 +6,17 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 module.exports.getAllSchoolList = async (req, res) => {
+  // const schoolsList = await School.find({})
+  //   .populate("students")
+  //   .populate("camps");
   const schoolsList = await School.find({})
-    .populate("students")
-    .populate("camps");
+    .populate({
+      path: "camps",
+      populate: {
+        path: "students",
+      },
+    })
+    .exec();
   //getting all the schools (full schools document)
   res.status(201).json(schoolsList);
 };
