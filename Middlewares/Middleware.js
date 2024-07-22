@@ -26,3 +26,18 @@ module.exports.verifyAdmin = async (req, res, next) => {
     res.send(error);
   }
 };
+
+module.exports.verifySchool = async (req, res, next) => {
+  const auth = req.cookies.SchoolAuthorization;
+  if (!auth) return res.status(401).json({ message: "Invalid Token :(" });
+
+  try {
+    const verify = jwt.verify(auth, process.env.TOKEN_SECRET);
+    console.log(verify);
+    req.schoolId = verify.schoolId;
+    console.log(req.schoolId);
+    next();
+  } catch (error) {
+    res.send(error);
+  }
+};
