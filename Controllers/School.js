@@ -78,7 +78,7 @@ module.exports.createCamp = async (req, res) => {
   const camp = new Camp({
     name,
     date: campTime,
-    venue
+    venue,
   });
   await camp.save().then(() => {
     console.log("The camp was created Sucessfully");
@@ -91,6 +91,18 @@ module.exports.createCamp = async (req, res) => {
   console.log(school);
 
   res.status(201).json({ message: "The camp was created successfully" });
+};
+
+module.exports.fetchSchoolData = async (req, res, next) => {
+  const { uniqueCode } = req.body;
+  const school = await School.findById(uniqueCode)
+    .populate({
+      path: "camps",
+      match: { date: { $gte: new Date().getTime() } }, // Filter camps by date
+    })
+    .populate("students");
+  console.log(school);
+  res.status(201).json(school);
 };
 
 module.exports.registerStudent = async (req, res) => {

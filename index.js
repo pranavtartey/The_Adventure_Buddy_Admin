@@ -28,6 +28,7 @@ const sessionConfig = {
 };
 
 //Middleware used
+app.use(express.static(path.join("../", "build")));
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -42,7 +43,6 @@ app.use(function (req, res, next) {
   );
   next();
 });
-app.use(express.static(path.join("../", "build")));
 
 //Database Config
 const dbURL = process.env.dbURL;
