@@ -101,8 +101,24 @@ module.exports.fetchSchoolData = async (req, res, next) => {
       match: { date: { $gte: new Date().getTime() } }, // Filter camps by date
     })
     .populate("students");
+
+  if (school.camps[0]) {
+    res.status(201).json({
+      schoolId: school._id,
+      campId: school.camps[0]._id,
+      schoolName: school.name,
+      campName: school.camps[0].name,
+      campVenue: school.camps[0].venue,
+      campDate: `${new Date(school.camps[0].date).getDate()}/${
+        new Date(school.camps[0].date).getMonth() + 1
+      }/${new Date(school.camps[0].date).getFullYear()}`,
+      message: "This is the camp data",
+    });
+  } else {
+    res.status(201).json(false);
+  }
   console.log(school);
-  res.status(201).json(school);
+  // res.status(201).json(school);
 };
 
 module.exports.registerStudent = async (req, res) => {

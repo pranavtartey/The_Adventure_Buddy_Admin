@@ -61,13 +61,13 @@ db.once("open", () => {
 //Routes Config
 app.use("/the_adventure_buddy/admin", adminRoutes);
 app.use("/the_adventure_buddy/public", schoolRoutes);
-// app.use("/", (req, res) => {
+// app.use("/network-check", (req, res) => {
 //   res.status(201).json({ message: "welcome to The Adventure Buddy" });
 // });
 
 removeStudents();
 cron.schedule("0 0 * * 0", removeStudents);
 
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Listening on port http://192.168.2.124:${PORT}`);
 });
