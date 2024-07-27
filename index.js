@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const connect = require("./db/connect");
 const app = express();
+const nodemailer = require("nodemailer");
 const cors = require("cors");
 const adminRoutes = require("./Routes/Admin");
 const schoolRoutes = require("./Routes/School");
@@ -61,6 +62,33 @@ db.once("open", () => {
 //Routes Config
 app.use("/the_adventure_buddy/admin", adminRoutes);
 app.use("/the_adventure_buddy/public", schoolRoutes);
+
+const transporter = nodemailer.createTransport({
+  service: "gmail", // e.g., Gmail, Yahoo, etc.
+  auth: {
+    user: "pranavtartey21@gmail.com",
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+});
+
+app.post("/send-email", (req, res) => {
+  const { to, subject, text } = req.body;
+
+  const mailOptions = {
+    from: "",
+    to: to,
+    subject: subject,
+    text: text,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return res.status(500).send(error.toString());
+    }
+    res.status(200).send("Email sent: " + info.response);
+  });
+});
+
 // app.use("/network-check", (req, res) => {
 //   res.status(201).json({ message: "welcome to The Adventure Buddy" });
 // });
