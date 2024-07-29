@@ -63,31 +63,31 @@ db.once("open", () => {
 app.use("/the_adventure_buddy/admin", adminRoutes);
 app.use("/the_adventure_buddy/public", schoolRoutes);
 
-const transporter = nodemailer.createTransport({
-  service: "gmail", // e.g., Gmail, Yahoo, etc.
-  auth: {
-    user: "pranavtartey21@gmail.com",
-    pass: process.env.GMAIL_APP_PASSWORD,
-  },
-});
+// const transporter = nodemailer.createTransport({
+//   service: "gmail", // e.g., Gmail, Yahoo, etc.
+//   auth: {
+//     user: "pranavtartey21@gmail.com",
+//     pass: process.env.GMAIL_APP_PASSWORD,
+//   },
+// });
 
-app.post("/send-email", (req, res) => {
-  const { to, subject, text } = req.body;
+// app.post("/send-email", (req, res) => {
+//   const { to } = req.body;
 
-  const mailOptions = {
-    from: "",
-    to: to,
-    subject: subject,
-    text: text,
-  };
+//   const mailOptions = {
+//     from: "",
+//     to: to,
+//     subject: "This is a system generated mail Subject",
+//     text: "This is the system generated text from backend app",
+//   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      return res.status(500).send(error.toString());
-    }
-    res.status(200).send("Email sent: " + info.response);
-  });
-});
+//   transporter.sendMail(mailOptions, (error, info) => {
+//     if (error) {
+//       return res.status(500).send(error.toString());
+//     }
+//     res.status(200).send("Email sent: " + info.response);
+//   });
+// });
 
 // app.use("/network-check", (req, res) => {
 //   res.status(201).json({ message: "welcome to The Adventure Buddy" });

@@ -6,7 +6,8 @@ const {
   logoutSchool,
   createCamp,
   registerStudent,
-  fetchSchoolData
+  fetchSchoolData,
+  queryMail,
 } = require("../Controllers/School");
 const { catchAsync } = require("../utils/catchAsync");
 const { verifyRegister, verifySchool } = require("../Middlewares/Middleware");
@@ -24,6 +25,7 @@ Router.route("/:schoolId/:campId/register-student").post(
   verifyRegister,
   catchAsync(registerStudent)
 );
-Router.route("/unique-code").post(fetchSchoolData)
+Router.route("/unique-code").post(fetchSchoolData);
+Router.route("/query").post(queryMail);
 
 module.exports = Router;

@@ -4,7 +4,7 @@ const Student = require("../Models/Student");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cron = require("node-cron");
-
+const { transporter } = require("../utils/mailTransporter");
 module.exports.createSchool = async (req, res) => {
   const { name, address, state, city, email, password, pincode } = req.body;
   const schoolAlreadyPresent = await School.findOne({ email });
@@ -136,6 +136,40 @@ module.exports.registerStudent = async (req, res) => {
   camp.studentCount += 1;
   await camp.save();
   res.status(201).json({ message: "The student was registered successfully" });
+};
+
+module.exports.queryMail = async (req, res) => {
+  const { email, query, name, mobilenumber } = req.body;
+  // console.log(req.body);
+  // console.log(email);
+  // console.log(mobilenumber);
+  // console.log(name);
+  // console.log(query);
+  const userMailOptions = {
+    from: "pranavtartey21@gmail.com",
+    to: email,
+    subject: "Successful query on The Adventure Buddy",
+    text: "Thankyou for reaching out to us. Your query has been sent ;) We will reach out to you within 24 hrs",
+  };
+
+  const ownerMailOptions = {
+    from: "pranavtartey21@gmail.com",
+    to: "pranavtartey@gmail.com", // Replace with the owner's email address
+    subject: "New Query from Customer",
+    text: `You have received a new query from Name: ${name} Contact Number : ${mobilenumber} Email: ${email}. The query is as follows:\n\n${query}`,
+  };
+
+  transporter.sendMail(userMailOptions, (error, info) => {
+    if (error) {
+      return res.status(500).send(error.toString());
+    }
+    transporter.sendMail(ownerMailOptions, (error, info) => {
+      if (error) {
+        return res.status(500).send(error.toString());
+      }
+      res.status(200).send("Emails sent: " + info.response);
+    });
+  });
 };
 
 module.exports.logoutSchool = async (req, res) => {
