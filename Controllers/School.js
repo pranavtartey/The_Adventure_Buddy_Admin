@@ -46,14 +46,7 @@ module.exports.loginSchool = async (req, res) => {
   const token = jwt.sign({ schoolId: school._id }, "thisismysecret");
 
   console.log(req.body);
-  res
-    .status(201)
-    .cookie("SchoolAuthorization", token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    })
-    .header("SchoolAuthorization", token)
-    .json({ message: "Login Successful" });
+  res.status(201).header("SchoolAuthorization", token).send(token);
 };
 
 module.exports.getSchool = async (req, res) => {
@@ -178,7 +171,7 @@ module.exports.queryMail = async (req, res) => {
 
 module.exports.logoutSchool = async (req, res) => {
   res
-    .clearCookie("Authorization", { path: "/" })
+    .clearCookie("SchoolAuthorization", { path: "/" })
     .status(201)
     .send("School was logout");
 };
