@@ -33,23 +33,27 @@ module.exports.createSchool = async (req, res) => {
   res.status(201).json({ message: "The school was created successfully" });
 };
 
-module.exports.loginSchool = async (req, res, next) => {
+module.exports.loginSchool = async (req, res) => {
   const { email, password } = req.body;
   let school = await School.findOne({ email });
-  if (!school) return res.status(401).json({ message: "Invalid Username" });
+  if (!school)
+    return res.status(401).json({ message: "Invalid email or Password" });
 
   console.log(school);
   let isValidPassword = await bcrypt.compare(password, school.password);
   if (!isValidPassword)
-    return res.status(401).json({ message: "Invalid Password" });
+    return res.status(401).json({ message: "Invalid Password or email" });
   const token = jwt.sign({ schoolId: school._id }, "thisismysecret");
 
+  console.log(req.body);
   res
     .status(201)
-    .cookie("SchoolAuthorization", token)
-    .header("SchoolAuthorisation", token)
-    .send(token);
-  // console.log(req.body);
+    .cookie("SchoolAuthorization", token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    })
+    .header("SchoolAuthorization", token)
+    .json({ message: "Login Successful" });
 };
 
 module.exports.getSchool = async (req, res) => {

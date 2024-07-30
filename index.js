@@ -25,25 +25,42 @@ const sessionConfig = {
     httpOnly: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
+    sameSite: "Lax",
   },
 };
 
+const corsOptions = {
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: [
+    "Content-Type",
+    "SchoolAuthorization",
+    "Authorization",
+    "Origin",
+    "X-Requested-With",
+    "Accept",
+  ],
+  credentials: true,
+};
+
 //Middleware used
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  next();
+});
 app.use(express.static(path.join("../", "build")));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session(sessionConfig));
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin,X-Requested_With, Content_Type, Accept"
-  );
-  next();
-});
 
 //Database Config
 const dbURL = process.env.dbURL;
@@ -63,35 +80,6 @@ db.once("open", () => {
 app.use("/the_adventure_buddy/admin", adminRoutes);
 app.use("/the_adventure_buddy/public", schoolRoutes);
 
-// const transporter = nodemailer.createTransport({
-//   service: "gmail", // e.g., Gmail, Yahoo, etc.
-//   auth: {
-//     user: "pranavtartey21@gmail.com",
-//     pass: process.env.GMAIL_APP_PASSWORD,
-//   },
-// });
-
-// app.post("/send-email", (req, res) => {
-//   const { to } = req.body;
-
-//   const mailOptions = {
-//     from: "",
-//     to: to,
-//     subject: "This is a system generated mail Subject",
-//     text: "This is the system generated text from backend app",
-//   };
-
-//   transporter.sendMail(mailOptions, (error, info) => {
-//     if (error) {
-//       return res.status(500).send(error.toString());
-//     }
-//     res.status(200).send("Email sent: " + info.response);
-//   });
-// });
-
-// app.use("/network-check", (req, res) => {
-//   res.status(201).json({ message: "welcome to The Adventure Buddy" });
-// });
 
 removeStudents();
 cron.schedule("0 0 * * 0", removeStudents);
