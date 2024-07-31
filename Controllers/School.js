@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cron = require("node-cron");
 const { transporter } = require("../utils/mailTransporter");
+
 module.exports.createSchool = async (req, res) => {
   const { name, address, state, city, email, password, pincode } = req.body;
   const schoolAlreadyPresent = await School.findOne({ email });
