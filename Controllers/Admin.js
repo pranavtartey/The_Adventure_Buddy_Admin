@@ -58,8 +58,8 @@ module.exports.loginAdmin = async (req, res) => {
 
   res
     .status(201)
-    .cookie("Authorization", token)
-    .header("Authorisation", token)
+    .cookie("AdminAuthorization", token)
+    .header("AdminAuthorization", token)
     .send(token);
   //this token holds the userId so that we can decode the the token and get the Admin from there
 };
