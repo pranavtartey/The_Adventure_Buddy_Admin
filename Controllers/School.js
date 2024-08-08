@@ -170,6 +170,16 @@ module.exports.queryMail = async (req, res) => {
   });
 };
 
+module.exports.validSchool = (req, res) => {
+  const { uniqueCode } = req.body;
+  if (uniqueCode === process.env.SCHOOL_UNIQUE_CODE) {
+    res.status(201).json({ isValid: true });
+  } else {
+    res.status(201).send({ isValid: false });
+  }
+  console.log(typeof uniqueCode);
+};
+
 module.exports.logoutSchool = async (req, res) => {
   res
     .clearCookie("SchoolAuthorization", { path: "/" })

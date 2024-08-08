@@ -8,6 +8,7 @@ const {
   registerStudent,
   fetchSchoolData,
   queryMail,
+  validSchool,
 } = require("../Controllers/School");
 const { catchAsync } = require("../utils/catchAsync");
 const { verifyRegister, verifySchool } = require("../Middlewares/Middleware");
@@ -27,5 +28,6 @@ Router.route("/:schoolId/:campId/register-student").post(
 );
 Router.route("/unique-code").post(fetchSchoolData);
 Router.route("/query").post(queryMail);
+Router.route("/school-unique-id-code").post(validSchool);
 
 module.exports = Router;

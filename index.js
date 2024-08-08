@@ -83,6 +83,6 @@ app.use("/the_adventure_buddy/public", schoolRoutes);
 removeStudents();
 cron.schedule("0 0 * * 0", removeStudents);
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
   console.log(`Listening on port http://192.168.2.124:${PORT}`);
 });
